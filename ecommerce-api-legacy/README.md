@@ -9,6 +9,6 @@ npm install
 npm start
 ```
 
-A aplicação sobe em `http://localhost:3000`. O banco SQLite é em memória e já carrega seeds automaticamente no boot.
+A aplicação sobe em `http://localhost:3000`. O banco SQLite é em memória e carrega cursos, uma matrícula e o usuário Leonan no boot. A senha desse usuário vem de `SEED_USER_PASSWORD`; se a variável não existir, o boot gera um valor aleatório. O checkout de `api.http` não depende dessa senha.
 
 Exemplos de requisições estão em `api.http`.
