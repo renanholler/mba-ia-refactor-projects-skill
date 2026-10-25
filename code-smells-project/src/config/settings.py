@@ -1,6 +1,5 @@
 import os
 from dataclasses import dataclass
-from typing import Optional
 
 
 def _flag(name, default):
@@ -8,10 +7,13 @@ def _flag(name, default):
     return raw.strip().lower() in ("1", "true", "yes")
 
 
-def _optional(name):
+_DEV_SEED_PASSWORD = "dev-only-change-me"
+
+
+def _seed_password(name):
     raw = os.environ.get(name)
     if raw is None or raw.strip() == "":
-        return None
+        return _DEV_SEED_PASSWORD
     return raw
 
 
@@ -24,9 +26,9 @@ class Settings:
     db_path: str
     ambiente: str
     versao: str
-    seed_admin_password: Optional[str]
-    seed_joao_password: Optional[str]
-    seed_maria_password: Optional[str]
+    seed_admin_password: str
+    seed_joao_password: str
+    seed_maria_password: str
 
 
 def load_settings():
@@ -38,7 +40,7 @@ def load_settings():
         db_path=os.environ.get("DATABASE_PATH", "loja.db"),
         ambiente=os.environ.get("AMBIENTE", "producao"),
         versao="1.0.0",
-        seed_admin_password=_optional("SEED_ADMIN_PASSWORD"),
-        seed_joao_password=_optional("SEED_JOAO_PASSWORD"),
-        seed_maria_password=_optional("SEED_MARIA_PASSWORD"),
+        seed_admin_password=_seed_password("SEED_ADMIN_PASSWORD"),
+        seed_joao_password=_seed_password("SEED_JOAO_PASSWORD"),
+        seed_maria_password=_seed_password("SEED_MARIA_PASSWORD"),
     )

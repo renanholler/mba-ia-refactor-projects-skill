@@ -9,10 +9,13 @@ from utils.helpers import utc_now
 from datetime import timedelta
 
 
+_DEV_SEED_PASSWORD = "dev-only-change-me"
+
+
 def _password(name):
     value = os.environ.get(name)
-    if not value:
-        raise RuntimeError("Defina SEED_JOAO_PASSWORD, SEED_MARIA_PASSWORD e SEED_PEDRO_PASSWORD")
+    if value is None or value.strip() == "":
+        return _DEV_SEED_PASSWORD
     return value
 
 

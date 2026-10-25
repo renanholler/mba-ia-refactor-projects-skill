@@ -173,7 +173,7 @@ cd code-smells-project
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-SEED_ADMIN_PASSWORD=admin123 SEED_JOAO_PASSWORD=joao123 SEED_MARIA_PASSWORD=maria123 python app.py
+python app.py
 ```
 
 ```bash
@@ -187,10 +187,10 @@ cd task-manager-api
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-SEED_JOAO_PASSWORD=1234 SEED_MARIA_PASSWORD=abcd SEED_PEDRO_PASSWORD=pass python seed.py
+python seed.py
 python app.py
 ```
 
-As senhas de seed não ficam no fonte. Sem essas variáveis, a loja sobe com produtos e sem usuários, e o `seed.py` do task manager recusa rodar. Login da loja: `admin@loja.com` / `admin123`. Login do task manager: `joao@email.com` / `1234`.
+A senha de desenvolvimento dos usuários de exemplo é `dev-only-change-me`. Ela não é a senha antiga do clone. `SEED_ADMIN_PASSWORD`, `SEED_JOAO_PASSWORD`, `SEED_MARIA_PASSWORD`, `SEED_PEDRO_PASSWORD` e `SEED_USER_PASSWORD` substituem esse valor quando existem. Login da loja: `admin@loja.com` / `dev-only-change-me`. Login do task manager: `joao@email.com` / `dev-only-change-me`. O Leonan entra com a mesma senha.
 
 Loja em `http://localhost:5000/health` e `http://localhost:5000/produtos`. LMS em `http://localhost:3000`, com os pedidos de `ecommerce-api-legacy/api.http`. Task manager em `http://localhost:5000/health`, `/tasks` e `/login`. Se a 5000 já estiver ocupada, suba uma das APIs Flask com `PORT`.

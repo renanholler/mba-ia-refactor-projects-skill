@@ -1,4 +1,3 @@
-const crypto = require("crypto");
 const sqlite3 = require("sqlite3");
 
 const { hashPassword } = require("./security/password");
@@ -49,7 +48,7 @@ async function initSchema(db, settings) {
   await run(db, "CREATE TABLE payments (id INTEGER PRIMARY KEY, enrollment_id INTEGER, amount REAL, status TEXT)");
   await run(db, "CREATE TABLE audit_logs (id INTEGER PRIMARY KEY, action TEXT, created_at DATETIME)");
 
-  const seedPassword = settings.seedUserPassword || crypto.randomBytes(16).toString("hex");
+  const seedPassword = settings.seedUserPassword;
   await run(db, "INSERT INTO users (name, email, pass) VALUES (?, ?, ?)", [
     "Leonan",
     "leonan@fullcycle.com.br",
