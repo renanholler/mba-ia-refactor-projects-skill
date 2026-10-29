@@ -1,6 +1,7 @@
 const { checkout } = require("../controllers/checkoutController");
 const { financialReport } = require("../controllers/reportController");
 const { remove } = require("../controllers/userController");
+const { requireAdmin } = require("../middlewares/requireAdmin");
 
 function forward(handler, deps) {
   return (req, res, next) => {
@@ -9,10 +10,10 @@ function forward(handler, deps) {
 }
 
 function registerRoutes(app, deps) {
-  // A API não tem sessão. Relatório financeiro e exclusão de usuário seguem sem checagem de identidade.
+  const admin = requireAdmin(deps.settings);
   app.post("/api/checkout", forward(checkout, deps));
-  app.get("/api/admin/financial-report", forward(financialReport, deps));
-  app.delete("/api/users/:id", forward(remove, deps));
+  app.get("/api/admin/financial-report", admin, forward(financialReport, deps));
+  app.delete("/api/users/:id", admin, forward(remove, deps));
 }
 
 module.exports = { registerRoutes };

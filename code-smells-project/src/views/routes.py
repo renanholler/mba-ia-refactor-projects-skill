@@ -1,4 +1,5 @@
 from src.controllers import pedido_controller
+from src.middlewares.auth import require_admin
 from src.controllers import produto_controller
 from src.controllers import relatorio_controller
 from src.controllers import sistema_controller
@@ -6,16 +7,26 @@ from src.controllers import usuario_controller
 
 
 def register_routes(app):
-    # A API não tem sessão. Listagem de usuários, exclusão de produto e relatório seguem sem checagem de identidade.
+    # Exclusão, lista de usuários e relatório exigem o token de admin do ambiente.
     app.add_url_rule("/produtos", "listar_produtos", produto_controller.listar_produtos, methods=["GET"])
     app.add_url_rule("/produtos/busca", "buscar_produtos", produto_controller.buscar_produtos, methods=["GET"])
     app.add_url_rule("/produtos/<int:id>", "buscar_produto", produto_controller.buscar_produto, methods=["GET"])
     app.add_url_rule("/produtos", "criar_produto", produto_controller.criar_produto, methods=["POST"])
     app.add_url_rule("/produtos/<int:id>", "atualizar_produto", produto_controller.atualizar_produto, methods=["PUT"])
-    app.add_url_rule("/produtos/<int:id>", "deletar_produto", produto_controller.deletar_produto, methods=["DELETE"])
+    app.add_url_rule(
+        "/produtos/<int:id>",
+        "deletar_produto",
+        require_admin(produto_controller.deletar_produto),
+        methods=["DELETE"],
+    )
 
-    app.add_url_rule("/usuarios", "listar_usuarios", usuario_controller.listar_usuarios, methods=["GET"])
-    app.add_url_rule("/usuarios/<int:id>", "buscar_usuario", usuario_controller.buscar_usuario, methods=["GET"])
+    app.add_url_rule("/usuarios", "listar_usuarios", require_admin(usuario_controller.listar_usuarios), methods=["GET"])
+    app.add_url_rule(
+        "/usuarios/<int:id>",
+        "buscar_usuario",
+        require_admin(usuario_controller.buscar_usuario),
+        methods=["GET"],
+    )
     app.add_url_rule("/usuarios", "criar_usuario", usuario_controller.criar_usuario, methods=["POST"])
     app.add_url_rule("/login", "login", usuario_controller.login, methods=["POST"])
 
@@ -34,7 +45,12 @@ def register_routes(app):
         methods=["PUT"],
     )
 
-    app.add_url_rule("/relatorios/vendas", "relatorio_vendas", relatorio_controller.relatorio_vendas, methods=["GET"])
+    app.add_url_rule(
+        "/relatorios/vendas",
+        "relatorio_vendas",
+        require_admin(relatorio_controller.relatorio_vendas),
+        methods=["GET"],
+    )
     app.add_url_rule("/health", "health_check", sistema_controller.health_check, methods=["GET"])
     app.add_url_rule("/", "index", sistema_controller.index, methods=["GET"])
     app.add_url_rule("/admin/reset-db", "reset_database", sistema_controller.reset_database, methods=["POST"])

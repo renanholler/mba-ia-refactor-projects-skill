@@ -4,6 +4,7 @@ function loadSettings() {
     dbPath: process.env.DATABASE_PATH || ":memory:",
     paymentGatewayKey: process.env.PAYMENT_GATEWAY_KEY || "dev-only-change-me",
     seedUserPassword: process.env.SEED_USER_PASSWORD || "dev-only-change-me",
+    adminToken: process.env.ADMIN_TOKEN || "dev-only-change-me",
   };
 }
 

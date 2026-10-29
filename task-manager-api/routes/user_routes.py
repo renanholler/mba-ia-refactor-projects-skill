@@ -1,18 +1,21 @@
 from flask import Blueprint
 
 from controllers import user_controller
+from middlewares.auth import require_admin
 
 user_bp = Blueprint("users", __name__)
 
-# O login devolve o usuário sem a senha. Delete e as demais rotas seguem sem checagem de identidade.
+# O login devolve o usuário sem a senha. Lista, detalhe e exclusão exigem o token de admin.
 
 
 @user_bp.route("/users", methods=["GET"])
+@require_admin
 def get_users():
     return user_controller.list_users()
 
 
 @user_bp.route("/users/<int:user_id>", methods=["GET"])
+@require_admin
 def get_user(user_id):
     return user_controller.get_user(user_id)
 
@@ -28,6 +31,7 @@ def update_user(user_id):
 
 
 @user_bp.route("/users/<int:user_id>", methods=["DELETE"])
+@require_admin
 def delete_user(user_id):
     return user_controller.delete_user(user_id)
 

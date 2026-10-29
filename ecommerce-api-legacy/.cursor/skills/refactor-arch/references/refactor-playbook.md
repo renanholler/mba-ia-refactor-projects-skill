@@ -1,6 +1,6 @@
 # Playbook de refatoração
 
-Oito transformações obrigatórias, mais variações que o catálogo cita. Aplique só o que o relatório marcou. Preserve status HTTP e o corpo de sucesso das rotas de negócio.
+Nove transformações obrigatórias, mais variações que o catálogo cita. Aplique só o que o relatório marcou. Preserve status HTTP e o corpo de sucesso das rotas de negócio.
 
 ## 1. SQL concatenado → query parametrizada
 
@@ -134,6 +134,29 @@ task = db.session.get(Task, task_id)
 ```
 
 `replace(tzinfo=None)` só quando a coluna já persiste datetime ingênuo. Hash de senha: ver transformação 4.
+
+## 9. Rota sensível sem identidade → token de admin
+
+Rota sensível: `DELETE`, listagem ou detalhe de usuário, e relatório. Health, login, checkout, listagem de produto ou task e criação/atualização ficam com o contrato anterior.
+
+Antes: qualquer cliente apaga ou lê esse dado.
+
+Depois: `ADMIN_TOKEN` vem de `os.environ` / `process.env`. O fallback de desenvolvimento é `dev-only-change-me` e não é um segredo antigo. O cliente envia `Authorization: Bearer <token>`. Compare com `secrets.compare_digest` ou `crypto.timingSafeEqual` só quando os dois valores têm o mesmo tamanho. Token ausente ou diferente: 401, no envelope que o projeto já usa, e o handler não roda.
+
+```python
+def require_admin(view):
+    @wraps(view)
+    def wrapper(*args, **kwargs):
+        expected = current_app.config["ADMIN_TOKEN"]
+        header = request.headers.get("Authorization", "")
+        token = header[7:] if header.startswith("Bearer ") else ""
+        if len(token) != len(expected) or not secrets.compare_digest(token, expected):
+            return jsonify({"erro": "Não autorizado"}), 401
+        return view(*args, **kwargs)
+    return wrapper
+```
+
+Node: middleware na rota sensível, `res.status(401).send("Não autorizado")`. Não grave o token no log. Rota de SQL arbitrário ou reset que já responde 403 continua 403, com ou sem token.
 
 ## Extras curtos
 

@@ -29,6 +29,7 @@ class Settings:
     seed_admin_password: str
     seed_joao_password: str
     seed_maria_password: str
+    admin_token: str
 
 
 def load_settings():
@@ -43,4 +44,5 @@ def load_settings():
         seed_admin_password=_seed_password("SEED_ADMIN_PASSWORD"),
         seed_joao_password=_seed_password("SEED_JOAO_PASSWORD"),
         seed_maria_password=_seed_password("SEED_MARIA_PASSWORD"),
+        admin_token=os.environ.get("ADMIN_TOKEN") or "dev-only-change-me",
     )

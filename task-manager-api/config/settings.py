@@ -13,4 +13,5 @@ def load_settings():
         "debug": _flag("DEBUG", "true"),
         "host": os.environ.get("HOST", "0.0.0.0"),
         "port": int(os.environ.get("PORT", "5000")),
+        "admin_token": os.environ.get("ADMIN_TOKEN") or "dev-only-change-me",
     }

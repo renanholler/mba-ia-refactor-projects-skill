@@ -56,7 +56,7 @@ Recommendation: Não versionar senha. Se o seed precisar de usuário, gravar só
 File: app.py:18
 Description: `GET /usuarios` lista usuários (a senha vai no JSON, no finding de exposição). `GET /relatorios/vendas` (`app.py:28`) devolve faturamento. `DELETE /produtos/<id>` (`app.py:16`) apaga produto. Nenhuma dessas rotas verifica identidade. O `POST /admin/reset-db` fica no finding de god class (`app.py:47-58`) para não repetir o mesmo trecho.
 Impact: Relatório financeiro, lista de contas e exclusão de produto respondem para qualquer cliente. A API não tem sessão; o buraco é a ausência de fronteira em rota que apaga dado ou revela dado sensível.
-Recommendation: Não inventar fluxo de login novo. Separar a rota, parar de vazar senha e registrar que essas operações seguem sem identidade.
+Recommendation: Exigir token de admin vindo do ambiente (`ADMIN_TOKEN`), enviado em `Authorization: Bearer`. Sem token válido, responder 401 e não listar usuários, não apagar produto e não devolver o relatório. Não inventar JWT. Não devolver senha.
 
 ### [HIGH] Conexão SQLite global compartilhada
 File: database.py:4-10

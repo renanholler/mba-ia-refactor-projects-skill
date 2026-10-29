@@ -38,7 +38,7 @@ Recommendation: Não versionar senha. Se o seed precisar de usuário, a senha ve
 File: routes/user_routes.py:207-210
 Description: O login responde `token` igual a `fake-jwt-token-` mais o id. Nenhuma rota lê esse token. `DELETE /users/<id>` (`routes/user_routes.py:134-148`), `DELETE /tasks/<id>` (`routes/task_routes.py:225-235`) e `GET /reports/summary` (`routes/report_routes.py:12`) seguem sem checagem.
 Impact: O token é o id do usuário. Qualquer cliente apaga conta ou task e lê o relatório.
-Recommendation: Não inventar um JWT novo. Parar de devolver credencial e de usar `fake-jwt-token-` + id. Registrar que delete e relatório seguem sem identidade.
+Recommendation: Exigir token de admin vindo do ambiente (`ADMIN_TOKEN`), enviado em `Authorization: Bearer`. Sem token válido, responder 401 e não apagar task, usuário ou categoria e não devolver o relatório. Não inventar JWT. Não devolver senha nem `fake-jwt-token-` + id.
 
 ### [HIGH] Senha comparada e gravada com MD5
 File: models/user.py:27-32

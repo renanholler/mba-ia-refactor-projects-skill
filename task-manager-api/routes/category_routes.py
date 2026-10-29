@@ -1,6 +1,7 @@
 from flask import Blueprint
 
 from controllers import category_controller
+from middlewares.auth import require_admin
 
 category_bp = Blueprint("categories", __name__)
 
@@ -21,5 +22,6 @@ def update_category(cat_id):
 
 
 @category_bp.route("/categories/<int:cat_id>", methods=["DELETE"])
+@require_admin
 def delete_category(cat_id):
     return category_controller.delete_category(cat_id)

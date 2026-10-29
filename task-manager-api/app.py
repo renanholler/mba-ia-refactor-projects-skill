@@ -16,6 +16,7 @@ settings = load_settings()
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = settings["database_uri"]
 app.config["SECRET_KEY"] = settings["secret_key"]
+app.config["ADMIN_TOKEN"] = settings["admin_token"]
 app.config["PROPAGATE_EXCEPTIONS"] = False
 
 CORS(app)

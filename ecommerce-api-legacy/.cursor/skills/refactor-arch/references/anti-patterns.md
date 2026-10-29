@@ -50,9 +50,9 @@ Correção: rota só encaminha. Controller orquestra. Model persiste. Efeito col
 
 ### missing-auth
 
-Sinal: rota que apaga dado, lista usuário com segredo ou devolve relatório financeiro sem qualquer checagem de identidade.
+Sinal: rota que apaga dado, lista usuário ou devolve relatório sem qualquer checagem de identidade.
 
-Correção: não invente um produto de login novo se a API não tinha sessão. Separe a rota, pare de vazar dado e registre o buraco. Onde já existe login, não devolva credencial e não use token previsível (`fake-jwt-token-` + id).
+Correção: exija um token de admin lido do ambiente. Sem `Authorization: Bearer` válido, responda 401 e não execute a operação. Não invente JWT nem sessão nova. Onde já existe login, não devolva credencial e não use token previsível (`fake-jwt-token-` + id). Rota que já responde 403 e não executa SQL arbitrário ou reset permanece 403: o token não reabre essa operação.
 
 ## MEDIUM
 

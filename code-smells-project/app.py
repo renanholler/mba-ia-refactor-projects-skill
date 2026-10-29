@@ -13,6 +13,7 @@ def create_app():
     settings = load_settings()
     app = Flask(__name__)
     app.config["SECRET_KEY"] = settings.secret_key
+    app.config["ADMIN_TOKEN"] = settings.admin_token
     app.config["DEBUG"] = settings.debug
     app.config["PROPAGATE_EXCEPTIONS"] = False
     app.extensions["settings"] = settings

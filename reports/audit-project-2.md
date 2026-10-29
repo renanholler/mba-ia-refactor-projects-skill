@@ -38,7 +38,7 @@ Recommendation: Partir em config, model por domínio, controller por fluxo e rot
 File: src/AppManager.js:131-136
 Description: `DELETE /api/users/:id` apaga o usuário e não verifica quem chamou. `GET /api/admin/financial-report` (`src/AppManager.js:80`) devolve receita e alunos do mesmo modo. A API não tem sessão.
 Impact: Qualquer cliente apaga conta e lê o relatório financeiro. O delete ainda deixa matrícula e pagamento, e a própria resposta descreve isso.
-Recommendation: Não inventar fluxo de login. Separar as rotas, parar de vazar dado sensível e registrar que essas operações seguem sem identidade.
+Recommendation: Exigir token de admin vindo do ambiente (`ADMIN_TOKEN`), enviado em `Authorization: Bearer`. Sem token válido, responder 401 e não apagar o usuário nem devolver o relatório. Não inventar JWT nem sessão.
 
 ### [HIGH] Hash caseiro de senha com fallback 123456
 File: src/utils.js:17-23

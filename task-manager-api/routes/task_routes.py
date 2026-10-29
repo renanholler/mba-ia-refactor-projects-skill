@@ -1,6 +1,7 @@
 from flask import Blueprint
 
 from controllers import task_controller
+from middlewares.auth import require_admin
 
 task_bp = Blueprint("tasks", __name__)
 
@@ -26,6 +27,7 @@ def update_task(task_id):
 
 
 @task_bp.route("/tasks/<int:task_id>", methods=["DELETE"])
+@require_admin
 def delete_task(task_id):
     return task_controller.delete_task(task_id)
 
